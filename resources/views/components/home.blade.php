@@ -49,17 +49,7 @@
                 </div>
                 <div class="mid-2">
                   <p>{{ $films[$data]->year }}</p>
-                  <div class="block-stars">
-                    <ul class="w3l-ratings">
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-                          
-                
-                    </ul>
-                  </div>
+                  @include('templates.component.stars', ['rating' => $films[$data]->kritiks_avg_rating])
                   <div class="clearfix"></div>
                 </div>
               </div>
@@ -111,17 +101,7 @@
                   </div>
                   <div class="mid-2">
                     <p>{{ $filmFutured[$data]->year }}</p>
-                    <div class="block-stars">
-                      <ul class="w3l-ratings">
-                            <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-                            
-                  
-                      </ul>
-                    </div>
+                    @include('templates.component.stars', ['rating' => $filmFutured[$data]->kritiks_avg_rating])
                     <div class="clearfix"></div>
                   </div>
                 </div>
@@ -150,17 +130,7 @@
                   </div>
                   <div class="mid-2">
                     <p>{{ $filmRecentAdded[$data]->year }}</p>
-                    <div class="block-stars">
-                      <ul class="w3l-ratings">
-                            <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-                            
-                  
-                      </ul>
-                    </div>
+                    @include('templates.component.stars', ['rating' => $filmRecentAdded[$data]->kritiks_avg_rating])
                     <div class="clearfix"></div>
                   </div>
                 </div>

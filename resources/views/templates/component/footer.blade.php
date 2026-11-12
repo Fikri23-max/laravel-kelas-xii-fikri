@@ -5,8 +5,9 @@
         <div class="w3ls_footer_grid_left1">
           <h2>Subscribe to us</h2>
           <div class="w3ls_footer_grid_left1_pos">
-            <form action="#" method="post">
-              <input type="email" name="email" placeholder="Your email..." required="">
+            <form action="{{ route('subscribe.store') }}" method="post">
+              @csrf
+              <input type="email" name="email" placeholder="Your email..." value="{{ old('email') }}" required="" aria-label="Email untuk berlangganan">
               <input type="submit" value="Send">
             </form>
           </div>
@@ -23,19 +24,19 @@
     <div class="col-md-7 w3ls_footer_grid1_right">
       <ul>
         <li>
-          <a href="genres.html">Movies</a>
+          <a href="{{ route('movies') }}">Movies</a>
         </li>
         <li>
-          <a href="horror.html">Action</a>
+          <a href="{{ route('genre.name', 'Action') }}">Action</a>
         </li>
         <li>
-          <a href="genres.html">Adventure</a>
+          <a href="{{ route('genre.name', 'Adventure') }}">Adventure</a>
         </li>
         <li>
-          <a href="comedy.html">Comedy</a>
+          <a href="{{ route('genre.name', 'Comedy') }}">Comedy</a>
         </li>
         <li>
-          <a href="faq.html">FAQ</a>
+          <a href="{{ route('faq') }}">FAQ</a>
         </li>
         <li>
         </li>

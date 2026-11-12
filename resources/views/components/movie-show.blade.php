@@ -59,7 +59,7 @@
                       <tbody>
                         @foreach ($perans as $peran)
                         <tr>
-                          <td class="w3-list-info">{{ $peran->cast_id }}</td>
+                          <td class="w3-list-info">{{ $peran->cast->name ?? '-' }}</td>
                           <td class="w3-list-info">{{ $peran->actor }}</td>
                         </tr>
                         @endforeach
@@ -114,24 +114,55 @@
           </div>
         </div>
         <div class="clearfix"> </div>
-        <div class="all-comments">
+        <div class="all-comments" id="comments">
           <div class="all-comments-info">
             <a href="#">Comments</a>
+
+            @if (session('success'))
+              <div class="alert alert-success" style="margin-top: 15px;">
+                {{ session('success') }}
+              </div>
+            @endif
+
             <div class="agile-info-wthree-box">
-              <form>
-                <input type="text" placeholder="Name" required="">			           					   
-                <input type="text" placeholder="Email" required="">
-                <input type="text" placeholder="Phone" required="">
-                <textarea placeholder="Message" required=""></textarea>
-                <input type="submit" value="SEND">
-                <div class="clearfix"> </div>
-              </form>
+              @guest
+                <div class="alert alert-info" style="margin-top: 15px;">
+                  Silakan login terlebih dahulu untuk memberikan komentar.
+                  <a href="#" class="btn btn-xs" data-toggle="modal" data-target="#myModal" style="background: #ff8d1b; color: #fff; font-weight: bold; margin-left: 10px; padding: 4px 12px; text-transform: uppercase;">Login</a>
+                </div>
+              @else
+                @if ($errors->any())
+                  <div class="alert alert-danger" style="margin-top: 15px; margin-bottom: 15px;">
+                    <ul style="margin: 0; padding-left: 20px;">
+                      @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+                @endif
+
+                <form action="{{ route('comments.store', $film->id) }}" method="post">
+                  @csrf
+                  <div style="margin-bottom: 10px;">
+                    <label for="rating" style="display: block; margin-bottom: 5px; font-weight: normal; color: #333;">Rating:</label>
+                    <select name="rating" id="rating" required style="outline: none; border: 1px solid #D4D3D3; background: #fff; padding: 8px 10px; font-size: 13px; width: 60%; max-width: 200px;">
+                      <option value="" disabled {{ old('rating') ? '' : 'selected' }}>Pilih Rating (1-5)</option>
+                      @for ($i = 1; $i <= 5; $i++)
+                        <option value="{{ $i }}" {{ old('rating') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                      @endfor
+                    </select>
+                  </div>
+                  <textarea name="comment" placeholder="Message" required>{{ old('comment') }}</textarea>
+                  <input type="submit" value="SEND">
+                  <div class="clearfix"> </div>
+                </form>
+              @endguest
             </div>
           </div>
           <div class="media-grids">
             @foreach ($comments as $comment)
               <div class="media">
-                <h5>{{ $comment->user_id }}</h5>
+                <h5>{{ $comment->user->name ?? 'Pengguna' }}</h5>
                 <div class="media-left">
                   <a href="#">
                     <img src="{{ asset('storage/images/user.jpg') }}" title="One movies" alt=" " />
@@ -181,15 +212,7 @@
                 </div>
                 <div class="mid-2 agile_mid_2_home">
                   <p>{{ $filmRelease->year }}</p>
-                  <div class="block-stars">
-                    <ul class="w3l-ratings">
-                      <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                      <li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-                    </ul>
-                  </div>
+                  @include('templates.component.stars', ['rating' => $filmRelease->kritiks_avg_rating])
                   <div class="clearfix"></div>
                 </div>
               </div>

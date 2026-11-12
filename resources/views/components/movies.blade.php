@@ -9,10 +9,12 @@
           <div class="browse-agile-w3ls general-w3ls">
             <div class="tittle-head">
               @if ($genreFilm !== null)
-                      <h4 class="latest-text">Movies Of Genre {{ $genreFilm->name }}</h4>
-                    @else
-                      <h4 class="latest-text">List Of Movies</h4>
-                    @endif
+                <h4 class="latest-text">Movies Of Genre {{ $genreFilm->name }}</h4>
+              @elseif (request()->filled('q'))
+                <h4 class="latest-text">Hasil pencarian untuk "{{ request('q') }}"</h4>
+              @else
+                <h4 class="latest-text">List Of Movies</h4>
+              @endif
               <div class="container">
                 <div class="agileits-single-top">
                   <ol class="breadcrumb">
@@ -29,40 +31,36 @@
             </div>
             <div class="container">
               <div class="browse-inner">
-              @for ($data = 0; $data < $films->count(); $data++)
-              <div class="col-md-2 w3l-movie-gride-agile">
-                <a href="{{ route('movies.show', $films[$data]->id) }}" class="hvr-shutter-out-horizontal"><img src="{{ asset($films[$data]->poster) }}" title="album-name" alt=" " />
-                  <div class="w3l-action-icon">
-                    <i class="fa fa-play-circle" aria-hidden="true"></i>
-                  </div>
-                </a>
-                <div class="mid-1">
-                  <div class="w3l-movie-text">
-                    <h6><a href="{{ route('movies.show', $films[$data]->id) }}">{{ $films[$data]->title }}</a></h6>							
-                  </div>
-                  <div class="mid-2">
-                    <p>{{ $films[$data]->year }}</p>
-                    <div class="block-stars">
-                      <ul class="w3l-ratings">
-                            <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star-half-o" aria-hidden="true"></i></a></li>
-                          <li><a href="#"><i class="fa fa-star-o" aria-hidden="true"></i></a></li>
-                            
-                  
-                      </ul>
+              @if ($films->isEmpty())
+                <div class="col-md-12 text-center" style="padding: 50px 0;">
+                  <p style="font-size: 18px; color: #777;">Film tidak ditemukan</p>
+                </div>
+              @else
+                @for ($data = 0; $data < $films->count(); $data++)
+                <div class="col-md-2 w3l-movie-gride-agile">
+                  <a href="{{ route('movies.show', $films[$data]->id) }}" class="hvr-shutter-out-horizontal"><img src="{{ asset($films[$data]->poster) }}" title="album-name" alt=" " />
+                    <div class="w3l-action-icon">
+                      <i class="fa fa-play-circle" aria-hidden="true"></i>
                     </div>
-                    <div class="clearfix"></div>
+                  </a>
+                  <div class="mid-1">
+                    <div class="w3l-movie-text">
+                      <h6><a href="{{ route('movies.show', $films[$data]->id) }}">{{ $films[$data]->title }}</a></h6>							
+                    </div>
+                    <div class="mid-2">
+                      <p>{{ $films[$data]->year }}</p>
+                      @include('templates.component.stars', ['rating' => $films[$data]->kritiks_avg_rating])
+                      <div class="clearfix"></div>
+                    </div>
                   </div>
+                  @if ($films[$data]->year == now()->year)
+                  <div class="ribben two">
+                    <p>NEW</p>
+                  </div>
+                  @endif
                 </div>
-                @if ($films[$data]->year == now()->year)
-                <div class="ribben two">
-                  <p>NEW</p>
-                </div>
-                @endif
-              </div>
                 @endfor
+              @endif
               <div class="clearfix"> </div>
             </div>
               </div>
@@ -89,7 +87,7 @@
                               <span class="frist" aria-hidden="true">{{ $numberPage }}</span>
                             </li>
                           @else
-                            <li><a href="?page={{ $numberPage }}" class="frist">{{ $numberPage }}</a></li>
+                            <li><a href="{{ $films->url($numberPage) }}" class="frist">{{ $numberPage }}</a></li>
                           @endif
                         @endfor
                         {{-- Number Page/> --}}
